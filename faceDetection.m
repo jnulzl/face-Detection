@@ -51,7 +51,6 @@ function varargout = faceDetection_OutputFcn(hObject, eventdata, handles)
 % Get default command line output from handles structure
 varargout{1} = handles.output;
 
-
 % --- Executes on button press in faceDetection.
 function faceDetection_Callback(hObject, eventdata, handles)
 % hObject    handle to faceDetection (see GCBO)
@@ -61,33 +60,31 @@ if(handles.img == 0)
     return;
 end
 faceDetector = vision.CascadeObjectDetector();
-% 读取图像并进行人脸检测.
+% detecting face in the handles.img.
 bbox= step(faceDetector,handles.img);
-% 在检测到的人脸周围画一个矩形.
+% plot a rectangle around the detected face.
 handles.img = insertShape(handles.img, 'Rectangle', bbox);
-% clf
-imshow(handles.img);
-guidata(hObject, handles);
+imshow(handles.img);%show image  
+guidata(hObject, handles);%update data
+
 % --- Executes on button press in OpenImage.
 function OpenImage_Callback(hObject, eventdata, handles)
 % hObject    handle to OpenImage (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-[filename, pathname] = uigetfile('*.jpg', '读取图片文件'); %选择图片文件
-if ~isequal(filename,0)   %判断是否选择
-   pathfile=fullfile(pathname, filename);  %获得图片路径
-   handles.img = imread(pathfile);     %将图片读入矩阵
-   imshow(handles.img);
-   guidata(hObject, handles);
+[filename, pathname] = uigetfile('*.jpg', 'Select a jpg image'); %select a image
+if ~isequal(filename,0)   
+   pathfile=fullfile(pathname, filename);  %get image path
+   handles.img = imread(pathfile);     %read a image using 'pathfile'
+   imshow(handles.img);%show image  
+   guidata(hObject, handles);%update data
 end
-% title('人脸检测');
 
 % --- Executes on button press in ClearImage.
 function ClearImage_Callback(hObject, eventdata, handles)
 % hObject    handle to ClearImage (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-% axis(handles.myAxis);
 cla
 handles.img = 0;
 guidata(hObject, handles);
